@@ -4,12 +4,14 @@ export default abstract class BoardIntegrated {
   private static gettingPromise: Promise<void> | null = null;
   private static board: Board = new Board();
 
+  protected pin: number;
+
   constructor() {
     BoardIntegrated.gettingPromise = this.connectToBoard();
   }
 
   private async connectToBoard(): Promise<void> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       if (BoardIntegrated.board.isReady) {
         return resolve();
       }
@@ -22,6 +24,13 @@ export default abstract class BoardIntegrated {
   }
 
   public abstract setPin(pin: number): Promise<void>;
+  get getPin() {
+    return this.pin;
+  }
+
+  public isBoardReady(): boolean {
+    return BoardIntegrated.board.isReady;
+  }
 
   public async waitBoardBeReady(): Promise<void> {
     if (BoardIntegrated.board.isReady) {
