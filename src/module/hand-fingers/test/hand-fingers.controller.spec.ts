@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { HandFingersController } from './hand-fingers.controller';
+import { HandFingersController } from '../hand-fingers.controller';
 
 describe('HandFingersController', () => {
   let controller: HandFingersController;

@@ -7,7 +7,7 @@ export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
   async signIn(
-    authCredentialsDto: AuthCredentialsDto,
+    authCredentialsDto: AuthCredentialsDto
   ): Promise<{ token: string }> {
     const isUserValitaded = await this.validateUser(authCredentialsDto);
 
