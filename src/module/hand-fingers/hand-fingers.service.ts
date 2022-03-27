@@ -1,30 +1,49 @@
 import { Injectable } from '@nestjs/common';
-import { Led } from 'johnny-five';
+import { Led, Servo } from 'johnny-five';
 import BoardIntegrated from 'src/util/boardIntegrated.util';
+import Finger from 'src/util/finger';
 import { UsingBoard } from 'src/util/UsingBoard';
+import { FingersName, HandPoseService } from '../hand-pose/hand-pose.service';
 
 @Injectable()
-export class HandFingersService extends BoardIntegrated {
-  private led!: Led;
+export class HandFingersService {
+  public moving: boolean;
 
-  public async setPin(pin: number): Promise<void> {
-    await this.waitBoardBeReady();
-    this.pin = pin;
-    this.led = new Led(pin);
+  constructor(private readonly handPoseService: HandPoseService) {
+    this.setupHand();
   }
 
-  @UsingBoard
-  public on() {
-    this.led.on();
+  private async setupHand() {
+    const fingers = await this.getFingers();
+
+    fingers.forEach((finger) => {
+      this.handPoseService.setFinger(finger.id as FingersName, finger);
+    });
   }
 
-  @UsingBoard
-  public off() {
-    this.led.stop(0);
+  private async getFingers(): Promise<Finger[]> {
+    const fingersMap: Map<FingersName, number> = new Map([
+      ['thumb', 10],
+      ['pointer', 11],
+      ['middle', 44],
+      ['ring', 12],
+      ['pinky', 55],
+    ]);
+
+    const fingerList: Finger[] = [];
+
+    for (const fingerKeyValue of fingersMap.entries()) {
+      const fingerName = fingerKeyValue[0];
+      const servoPort = fingerKeyValue[1];
+      const finger = new Finger(fingerName, servoPort);
+      fingerList.push(finger);
+    }
+
+    return fingerList;
   }
 
-  @UsingBoard
-  public strobe() {
-    this.led.strobe(150);
+  public doGesture() {
+    // @TODO Select the gesture
+    this.handPoseService.doLikePose();
   }
 }

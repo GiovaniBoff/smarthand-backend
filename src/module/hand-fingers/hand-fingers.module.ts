@@ -1,11 +1,16 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
+import { HandPoseModule } from '../hand-pose/hand-pose.module';
+import { HandPoseService } from '../hand-pose/hand-pose.service';
 import { HandFingersController } from './hand-fingers.controller';
 import { HandFingersService } from './hand-fingers.service';
 
 @Module({
-  imports: [PassportModule.register({ defaultStrategy: 'jwt' })],
+  imports: [
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    HandPoseModule,
+  ],
   controllers: [HandFingersController],
-  providers: [HandFingersService],
+  providers: [HandFingersService, HandPoseService],
 })
 export class HandFingersModule {}

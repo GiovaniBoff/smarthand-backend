@@ -7,11 +7,11 @@ export function UsingBoard(
 ) {
   return {
     get() {
-      function wrapperFn(this: BoardIntegrated, ...args: any[]) {
+      async function wrapperFn(this: BoardIntegrated, ...args: any[]) {
         const className = this.constructor.name;
         verifyBoardUsability(this, className);
 
-        descriptor.value.apply(this, args);
+        return descriptor.value.apply(this, args);
       }
 
       Object.defineProperty(this, methodName, {
@@ -36,7 +36,7 @@ function verifyBoardUsability(board: BoardIntegrated, className: string) {
   }
 
   function verifyPin() {
-    if (!board.getPin) {
+    if (Number.isNaN(board.getPin)) {
       const message = `Pin not set on: ${className}`;
       throw new Error(message);
     }

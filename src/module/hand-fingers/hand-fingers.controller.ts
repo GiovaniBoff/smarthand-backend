@@ -3,15 +3,13 @@ import { AuthGuard } from '@nestjs/passport';
 import { HandFingersService } from './hand-fingers.service';
 
 @Controller('api/finger')
-@UseGuards(AuthGuard('jwt'))
+// @UseGuards(AuthGuard('jwt'))
 export class HandFingersController {
-  constructor(private readonly handFingersService: HandFingersService) {
-    this.handFingersService.setPin(3);
-  }
+  constructor(private readonly handFingersService: HandFingersService) {}
 
   @Post('/on')
   turnLedOn(): any {
-    this.handFingersService.on();
+    this.handFingersService.doGesture();
     return {
       status: 'ligado',
     };
@@ -19,7 +17,7 @@ export class HandFingersController {
 
   @Post('/off')
   turnLedOff(): any {
-    this.handFingersService.off();
+    // this.handFingersService.off();
     return {
       status: 'desligado',
     };
@@ -27,7 +25,7 @@ export class HandFingersController {
 
   @Post('/strobe')
   strobe(): any {
-    this.handFingersService.strobe();
+    // this.handFingersService.strobe();
     return {};
   }
 }

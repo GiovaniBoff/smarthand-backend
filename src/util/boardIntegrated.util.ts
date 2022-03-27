@@ -2,7 +2,7 @@ import { Board } from 'johnny-five';
 
 export default abstract class BoardIntegrated {
   private static gettingPromise: Promise<void> | null = null;
-  private static board: Board = new Board();
+  private static board: Board = new Board({ repl: false });
 
   protected pin: number;
 
@@ -11,7 +11,7 @@ export default abstract class BoardIntegrated {
   }
 
   private async connectToBoard(): Promise<void> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, rejects) => {
       if (BoardIntegrated.board.isReady) {
         return resolve();
       }
@@ -20,10 +20,14 @@ export default abstract class BoardIntegrated {
         BoardIntegrated.gettingPromise = null;
         resolve();
       });
+
+      BoardIntegrated.board.on('close', () => {
+        BoardIntegrated.gettingPromise = null;
+        rejects();
+      });
     });
   }
 
-  public abstract setPin(pin: number): Promise<void>;
   get getPin() {
     return this.pin;
   }
@@ -40,5 +44,7 @@ export default abstract class BoardIntegrated {
     if (BoardIntegrated.gettingPromise) {
       return BoardIntegrated.gettingPromise;
     }
+
+    return Promise.reject();
   }
 }
