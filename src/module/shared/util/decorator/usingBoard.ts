@@ -1,4 +1,4 @@
-import BoardIntegrated from './boardIntegrated.util';
+import BoardIntegrated from '../boardIntegrated.util';
 
 export function UsingBoard(
   target: BoardIntegrated,

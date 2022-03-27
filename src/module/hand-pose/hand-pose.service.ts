@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import Finger from 'src/util/finger';
+import Finger from 'src/module/shared/util/finger';
 export type FingersName = 'thumb' | 'pointer' | 'middle' | 'ring' | 'pinky';
 
 @Injectable()

@@ -1,7 +1,6 @@
 import { Servo } from 'johnny-five';
-import { resolve } from 'path';
 import BoardIntegrated from './boardIntegrated.util';
-import { UsingBoard } from './UsingBoard';
+import { UsingBoard } from './decorator/usingBoard';
 export default class Finger extends BoardIntegrated {
   private servo!: Servo;
   public id!: string;

@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Led, Servo } from 'johnny-five';
-import BoardIntegrated from 'src/util/boardIntegrated.util';
-import Finger from 'src/util/finger';
-import { UsingBoard } from 'src/util/UsingBoard';
+import Finger from 'src/module/shared/util/finger';
 import { FingersName, HandPoseService } from '../hand-pose/hand-pose.service';
 
 @Injectable()
@@ -36,6 +33,7 @@ export class HandFingersService {
       const fingerName = fingerKeyValue[0];
       const servoPort = fingerKeyValue[1];
       const finger = new Finger(fingerName, servoPort);
+      await finger.waitBoardBeReady();
       fingerList.push(finger);
     }
 
