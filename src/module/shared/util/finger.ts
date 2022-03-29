@@ -1,5 +1,6 @@
 import { Servo } from 'johnny-five';
-import BoardIntegrated from './boardIntegrated.util';
+import { promisify } from 'util';
+import BoardIntegrated from './boardIntegrated';
 import { UsingBoard } from './decorator/usingBoard';
 export default class Finger extends BoardIntegrated {
   private servo!: Servo;
@@ -47,8 +48,7 @@ export default class Finger extends BoardIntegrated {
   }
 
   public onCompleteMovement(): Promise<void> {
-    return new Promise((resolve) => {
-      this.servo.on('move:complete', resolve);
-    });
+    const onResolve = promisify(this.servo.on);
+    return onResolve('move:complete');
   }
 }

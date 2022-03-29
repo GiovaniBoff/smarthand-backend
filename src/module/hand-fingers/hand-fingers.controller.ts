@@ -1,31 +1,23 @@
-import { Controller, Post, UseGuards } from '@nestjs/common';
+import { Controller, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Response } from 'express';
 import { HandFingersService } from './hand-fingers.service';
 
 @Controller('api/finger')
-// @UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'))
 export class HandFingersController {
   constructor(private readonly handFingersService: HandFingersService) {}
 
   @Post('/on')
-  turnLedOn(): any {
-    this.handFingersService.doGesture();
-    return {
-      status: 'ligado',
-    };
-  }
-
-  @Post('/off')
-  turnLedOff(): any {
-    // this.handFingersService.off();
-    return {
-      status: 'desligado',
-    };
-  }
-
-  @Post('/strobe')
-  strobe(): any {
-    // this.handFingersService.strobe();
-    return {};
+  turnLedOn(@Res() response: Response): any {
+    try {
+      const gestureName = this.handFingersService.doGesture('like');
+      response.send({
+        gesture: gestureName,
+        enable: false,
+      });
+    } catch (error) {
+      response.status(HttpStatus.BAD_REQUEST).send(error.message);
+    }
   }
 }

@@ -21,8 +21,9 @@ export default abstract class BoardIntegrated {
         resolve();
       });
 
-      BoardIntegrated.board.on('close', () => {
+      BoardIntegrated.board.on('fail', () => {
         BoardIntegrated.gettingPromise = null;
+        console.error('Board fails to connect');
         rejects();
       });
     });
