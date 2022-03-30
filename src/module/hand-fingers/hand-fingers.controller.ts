@@ -1,10 +1,17 @@
-import { Controller, HttpStatus, Logger, Post, Res, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  HttpStatus,
+  Logger,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { HandFingersService } from './hand-fingers.service';
 
 @Controller('api/finger')
-// @UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'))
 export class HandFingersController {
   private readonly LOGGER = new Logger(this.constructor.name);
   constructor(private readonly handFingersService: HandFingersService) {}
