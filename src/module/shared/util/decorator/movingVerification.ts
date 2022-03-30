@@ -4,14 +4,13 @@ export function MovingVerification(
   descriptor: PropertyDescriptor,
 ) {
   let instancing = true;
-  function handleRFunctionReturn(
+  function handlerFunctionReturn(
     self: any,
     functionReturn: Promise<any> | unknown,
   ) {
     if (functionReturn instanceof Promise) {
-      return functionReturn.then(function (value) {
+      return functionReturn.finally(() => {
         self.readyToAction = true;
-        return value;
       });
     }
     self.readyToAction = true;
@@ -35,7 +34,7 @@ export function MovingVerification(
         this.readyToAction = false;
         const functionReturn = descriptor.value.apply(this, args);
 
-        return handleRFunctionReturn(this, functionReturn);
+        return handlerFunctionReturn(this, functionReturn);
       }
 
       Object.defineProperty(this, methodName, {

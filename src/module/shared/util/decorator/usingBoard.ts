@@ -34,8 +34,6 @@ export function UsingBoard(
 
       Object.defineProperty(this, methodName, {
         value: wrapperFn,
-        configurable: true,
-        writable: true,
       });
 
       return wrapperFn;

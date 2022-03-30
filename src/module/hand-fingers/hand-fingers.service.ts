@@ -11,15 +11,15 @@ export class HandFingersService {
     this.setupHand();
   }
 
-  private async setupHand() {
-    const fingers = await this.getFingers();
+  private setupHand() {
+    const fingers = this.getFingers();
 
     fingers.forEach((finger) => {
       this.handPoseService.setFinger(finger.id as FingersName, finger);
     });
   }
 
-  private async getFingers(): Promise<Finger[]> {
+  private getFingers(): Finger[] {
     const fingersMap = fingersPinMap();
 
     const fingerList: Finger[] = [];
@@ -29,7 +29,6 @@ export class HandFingersService {
       const servoPort = fingerKeyValue[1];
       if (servoPort) {
         const finger = new Finger(fingerName, servoPort);
-        await finger.waitBoardBeReady();
         fingerList.push(finger);
       }
     }
@@ -37,9 +36,9 @@ export class HandFingersService {
     return fingerList;
   }
 
-  public doGesture(gestureName: string): string {
+  public async doGesture(gestureName: string): Promise<string> {
     // @TODO Select the gesture
-    this.handPoseService.doLikePose();
+    await this.handPoseService.doLikePose();
 
     return `Gesture ${gestureName} executed`;
   }

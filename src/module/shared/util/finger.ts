@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { Servo } from 'johnny-five';
 import { promisify } from 'util';
 import BoardIntegrated from './boardIntegrated';
@@ -6,27 +7,29 @@ export default class Finger extends BoardIntegrated {
   private servo!: Servo;
   public id!: string;
   private readonly MAXIMUM_POSITION = 120;
+  private readonly logger: Logger;
 
   constructor(id: string, pin: number) {
     super();
     this.id = id;
     this.pin = pin;
+    this.logger = new Logger(`${this.constructor.name} - ID: ${this.id}`);
 
     this.connectToServo();
   }
 
   private async connectToServo() {
-    await this.waitBoardBeReady();
+    try {
+      await this.waitBoardBeReady();
 
-    this.servo = new Servo({
-      pin: this.pin,
-      startAt: 0,
-      range: [0, this.MAXIMUM_POSITION],
-    });
-
-    setInterval(() => {
-      console.log(this.servo.position);
-    }, 100);
+      this.servo = new Servo({
+        pin: this.pin,
+        startAt: 0,
+        range: [0, this.MAXIMUM_POSITION],
+      });
+    } catch (error) {
+      this.logger.error(error);
+    }
   }
 
   @UsingBoard
