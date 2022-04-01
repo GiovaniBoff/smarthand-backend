@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { HandFingersService } from './hand-fingers.service';
 
 @Controller('api/finger')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard())
 export class HandFingersController {
   constructor(private readonly handFingersService: HandFingersService) {
     this.handFingersService.setPin(3);

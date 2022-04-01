@@ -4,7 +4,7 @@ import { AuthModule } from './module/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [AuthModule, HandFingersModule, ConfigModule.forRoot()],
+  imports: [ConfigModule.forRoot(), AuthModule, HandFingersModule],
   controllers: [],
   providers: [],
 })
