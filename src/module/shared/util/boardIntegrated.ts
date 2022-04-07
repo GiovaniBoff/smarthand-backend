@@ -1,17 +1,21 @@
 import { Board } from 'johnny-five';
 
-export default abstract class BoardIntegrated {
+export default class BoardIntegrated {
   private static gettingPromise: Promise<void> | null = null;
-  private static board: Board = new Board();
+  private static board: Board = new Board({ repl: false });
+  private static instanced = false;
 
   protected pin: number;
 
-  constructor() {
-    BoardIntegrated.gettingPromise = this.connectToBoard();
+  protected constructor() {
+    if (!BoardIntegrated.instanced) {
+      BoardIntegrated.instanced = true;
+      BoardIntegrated.gettingPromise = this.connectToBoard();
+    }
   }
 
   private async connectToBoard(): Promise<void> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, rejects) => {
       if (BoardIntegrated.board.isReady) {
         return resolve();
       }
@@ -20,10 +24,15 @@ export default abstract class BoardIntegrated {
         BoardIntegrated.gettingPromise = null;
         resolve();
       });
+
+      BoardIntegrated.board.on('fail', () => {
+        BoardIntegrated.gettingPromise = null;
+        console.error('Board fails to connect');
+        rejects('Board fails to connect');
+      });
     });
   }
 
-  public abstract setPin(pin: number): Promise<void>;
   get getPin() {
     return this.pin;
   }
@@ -40,5 +49,7 @@ export default abstract class BoardIntegrated {
     if (BoardIntegrated.gettingPromise) {
       return BoardIntegrated.gettingPromise;
     }
+
+    return Promise.reject();
   }
 }
