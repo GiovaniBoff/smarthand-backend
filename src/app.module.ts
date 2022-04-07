@@ -5,8 +5,8 @@ import { ConfigModule } from '@nestjs/config';
 import { HandPoseModule } from './module/hand-pose/hand-pose.module';
 
 @Module({
-  imports: [AuthModule, HandFingersModule, ConfigModule.forRoot(), HandPoseModule],
+  imports: [ConfigModule.forRoot(), AuthModule, HandFingersModule],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
