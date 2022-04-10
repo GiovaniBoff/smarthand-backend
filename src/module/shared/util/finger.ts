@@ -6,13 +6,14 @@ import { UsingBoard } from './decorator/usingBoard';
 export default class Finger extends BoardIntegrated {
   private servo!: Servo;
   public id!: string;
-  private readonly MAXIMUM_POSITION = 120;
+  private readonly maxPosition: number;
   private readonly logger: Logger;
 
-  constructor(id: string, pin: number) {
+  constructor(id: string, pin: number, maxPosition = 160) {
     super();
     this.id = id;
     this.pin = pin;
+    this.maxPosition = maxPosition;
     this.logger = new Logger(`${this.constructor.name} - ID: ${this.id}`);
 
     this.connectToServo();
@@ -25,7 +26,7 @@ export default class Finger extends BoardIntegrated {
       this.servo = new Servo({
         pin: this.pin,
         startAt: 0,
-        range: [0, this.MAXIMUM_POSITION],
+        range: [0, this.maxPosition],
       });
     } catch (error) {
       this.logger.error(error);
@@ -51,7 +52,16 @@ export default class Finger extends BoardIntegrated {
   }
 
   public onCompleteMovement(): Promise<void> {
-    const onResolve = promisify(this.servo.on);
-    return onResolve('move:complete');
+    this.logger.debug(
+      `Servo from ${this.id} is on position: ${this.servo.value}`,
+    );
+    return new Promise((resolve) => {
+      const interval = setInterval(() => {
+        if (this.servo.position >= this.maxPosition) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 3000);
+    });
   }
 }

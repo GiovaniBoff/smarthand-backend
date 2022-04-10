@@ -28,7 +28,11 @@ export class HandFingersService {
       const fingerName = fingerKeyValue[0];
       const servoPort = fingerKeyValue[1];
       if (servoPort) {
-        const finger = new Finger(fingerName, servoPort);
+        const finger = new Finger(
+          fingerName,
+          servoPort.pin,
+          servoPort.maxRange,
+        );
         fingerList.push(finger);
       }
     }
