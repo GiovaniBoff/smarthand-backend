@@ -5,11 +5,11 @@ export default function fingersPinPosition(): Map<
   FingersName,
   fingerConfig | null
 > {
-  const THUMB_PIN: fingerConfig = null; //11
-  const INDEX_PIN: fingerConfig = { pin: 6 }; //6
-  const MIDDLE_PIN: fingerConfig = null; //9
-  const RING_PIN: fingerConfig = { pin: 10 }; //10
-  const PINKY_PIN: fingerConfig = { pin: 5 }; //5
+  const THUMB_PIN: fingerConfig = { pin: 9, maxRange: 140 }; //11
+  const INDEX_PIN: fingerConfig = { pin: 6, maxRange: 160 }; //6
+  const MIDDLE_PIN: fingerConfig = { pin: 11, maxRange: 160 }; //9
+  const RING_PIN: fingerConfig = { pin: 10, maxRange: 160 }; //10
+  const PINKY_PIN: fingerConfig = { pin: 5, maxRange: 130 }; //5
 
   return new Map([
     ['thumb', THUMB_PIN],

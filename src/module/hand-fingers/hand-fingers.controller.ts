@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   HttpStatus,
   Logger,
   Post,
@@ -8,15 +9,16 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
+import { Socket } from 'socket.io';
 import { HandFingersService } from './hand-fingers.service';
 
 @Controller('api/finger')
-// @UseGuards(AuthGuard('jwt'))
+//@UseGuards(AuthGuard())
 export class HandFingersController {
   private readonly LOGGER = new Logger(this.constructor.name);
   constructor(private readonly handFingersService: HandFingersService) {}
 
-  @Post('/on')
+  @Get('/on')
   async turnLedOn(@Res() response: Response): Promise<any> {
     try {
       const gestureName = await this.handFingersService.doGesture('like');

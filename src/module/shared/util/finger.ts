@@ -9,7 +9,7 @@ export default class Finger extends BoardIntegrated {
   private readonly maxPosition: number;
   private readonly logger: Logger;
 
-  constructor(id: string, pin: number, maxPosition = 160) {
+  constructor(id: string, pin: number, maxPosition = 120) {
     super();
     this.id = id;
     this.pin = pin;
@@ -53,15 +53,15 @@ export default class Finger extends BoardIntegrated {
 
   public onCompleteMovement(): Promise<void> {
     this.logger.debug(
-      `Servo from ${this.id} is on position: ${this.servo.value}`,
+      `Servo from ${this.id} is on position: ${this.servo.value}`
     );
     return new Promise((resolve) => {
       const interval = setInterval(() => {
-        if (this.servo.position >= this.maxPosition) {
+        if (!this.servo.isMoving) {
           clearInterval(interval);
           resolve();
         }
-      }, 3000);
+      }, 1000);
     });
   }
 }
