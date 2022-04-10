@@ -53,15 +53,16 @@ export class HandFingersGateway
     this.handFingersService
       .doGesture(data)
       .then(() => {
-        this.server.emit(this.GESTURE_FEEDBACK, 'WOrkou');
+        this.server.emit(this.GESTURE_FEEDBACK, {
+          status: 'MOVEMENT_SUCCESS',
+          message: `The movement ${data} is finished`,
+          isAvailable: true,
+        });
       })
       .catch((error) => {
-        this.server.emit(this.GESTURE_FEEDBACK, `nao workou`);
-      })
-      .finally(() => {
         this.server.emit(this.GESTURE_FEEDBACK, {
-          status: 'END MOVMENT',
-          message: `The movement ${data} is finished`,
+          status: 'MOVEMENT_FAILED',
+          message: `The movement ${data} failed due $`,
           isAvailable: true,
         });
       });

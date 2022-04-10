@@ -8,6 +8,7 @@ export default class Finger extends BoardIntegrated {
   public id!: string;
   private readonly maxPosition: number;
   private readonly logger: Logger;
+  private readonly MOVEMENT_TIMER = 1000;
 
   constructor(id: string, pin: number, maxPosition = 120) {
     super();
@@ -35,32 +36,35 @@ export default class Finger extends BoardIntegrated {
 
   @UsingBoard
   public contract() {
-    this.servo.max();
+    this.servo.to(this.servo.range[1], this.MOVEMENT_TIMER);
     return this.onCompleteMovement();
   }
 
   @UsingBoard
   public extend() {
-    this.servo.min();
+    this.servo.to(this.servo.range[0], this.MOVEMENT_TIMER);
     return this.onCompleteMovement();
   }
 
   @UsingBoard
   public toPosition(deg: number) {
-    this.servo.to(deg);
+    this.servo.to(deg, this.MOVEMENT_TIMER);
     return this.onCompleteMovement();
   }
 
   public onCompleteMovement(): Promise<void> {
+    // const servoEventPromisify = promisify(this.servo.on);
+    // return servoEventPromisify('move:complete').catch((e) => {
+    //   this.logger.error(`Error on finger ${e}`);
+    // });
+
     return new Promise((resolve) => {
       this.logger.debug(
-        `Servo from ${this.id} is on position: ${this.servo.value}`,
+        `Servo from ${this.id} is on position: ${this.servo.value}`
       );
       const interval = setInterval(() => {
-        if (this.servo.position >= this.maxPosition) {
-          clearInterval(interval);
-          resolve();
-        }
+        clearInterval(interval);
+        resolve();
       }, 2000);
     });
   }
