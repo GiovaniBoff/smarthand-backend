@@ -52,16 +52,16 @@ export default class Finger extends BoardIntegrated {
   }
 
   public onCompleteMovement(): Promise<void> {
-    this.logger.debug(
-      `Servo from ${this.id} is on position: ${this.servo.value}`
-    );
     return new Promise((resolve) => {
+      this.logger.debug(
+        `Servo from ${this.id} is on position: ${this.servo.value}`,
+      );
       const interval = setInterval(() => {
-        if (!this.servo.isMoving) {
+        if (this.servo.position >= this.maxPosition) {
           clearInterval(interval);
           resolve();
         }
-      }, 1000);
+      }, 2000);
     });
   }
 }
