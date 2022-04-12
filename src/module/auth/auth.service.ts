@@ -7,9 +7,9 @@ export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
   async signIn(
-    authCredentialsDto: AuthCredentialsDto,
+    authCredentialsDto: AuthCredentialsDto
   ): Promise<{ token: string }> {
-    const isUserValitaded = await this.validateUser(authCredentialsDto);
+    const isUserValitaded = this.validateUser(authCredentialsDto);
 
     if (!isUserValitaded) {
       throw new UnauthorizedException('Invalids Credentials');
@@ -33,5 +33,10 @@ export class AuthService {
     const token = this.jwtService.sign(payload);
 
     return token;
+  }
+
+  private decodeToken(token: string): string {
+    const payload = this.decodeToken(token);
+    return payload['user'];
   }
 }

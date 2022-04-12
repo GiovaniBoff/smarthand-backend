@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { HandFingersService } from './hand-fingers.service';
+import { HandFingersService } from '../hand-fingers.service';
 
 describe('HandFingersService', () => {
   let service: HandFingersService;

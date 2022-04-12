@@ -11,7 +11,7 @@ import { Response } from 'express';
 import { HandFingersService } from './hand-fingers.service';
 
 @Controller('api/finger')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard())
 export class HandFingersController {
   private readonly LOGGER = new Logger(this.constructor.name);
   constructor(private readonly handFingersService: HandFingersService) {}
