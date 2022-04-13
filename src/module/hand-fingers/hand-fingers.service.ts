@@ -28,7 +28,11 @@ export class HandFingersService {
       const fingerName = fingerKeyValue[0];
       const servoPort = fingerKeyValue[1];
       if (servoPort) {
-        const finger = new Finger(fingerName, servoPort);
+        const finger = new Finger(
+          fingerName,
+          servoPort.pin,
+          servoPort.maxRange
+        );
         fingerList.push(finger);
       }
     }
@@ -37,8 +41,8 @@ export class HandFingersService {
   }
 
   public async doGesture(gestureName: string): Promise<string> {
-    // @TODO Select the gesture
-    await this.handPoseService.doLikePose();
+    this.handPoseService[gestureName] &&
+      (await this.handPoseService[gestureName]());
 
     return `Gesture ${gestureName} executed`;
   }

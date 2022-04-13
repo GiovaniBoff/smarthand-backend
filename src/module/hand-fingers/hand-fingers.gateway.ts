@@ -11,14 +11,20 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { HandFingersService } from './hand-fingers.service';
 
 @WebSocketGateway({ namespace: '/fingers', cors: true })
 export class HandFingersGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
+  constructor(private readonly handFingersService: HandFingersService) {}
+
   @WebSocketServer() server: Server;
 
   private logger: Logger = new Logger('HandFingersGateway');
+  private static readonly GESTURE_SIGNAL = 'GESTURE_SIGNAL';
+  private readonly GESTURE_FEEDBACK = 'GESTURE_FEEDBACK';
+  private static readonly READY_TO_PERFORM = '';
 
   afterInit(server: Server): void {
     this.logger.log(`=====> HandFingersGateway initialized!`);
@@ -34,14 +40,31 @@ export class HandFingersGateway
   }
 
   //@UseGuards(AuthGuard)
-  @SubscribeMessage('send_message')
+  @SubscribeMessage(HandFingersGateway.GESTURE_SIGNAL)
   handleMessage(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: string
+    @MessageBody() data: string,
   ): void {
-    setInterval(() => {
-      this.server.emit('receive_message', true);
-      this.logger.log(data);
-    }, 1000);
+    this.server.emit(this.GESTURE_FEEDBACK, {
+      status: 'MOVING',
+      message: `Solicitaded gesture ${data}`,
+      isAvailable: false,
+    });
+    this.handFingersService
+      .doGesture(data)
+      .then(() => {
+        this.server.emit(this.GESTURE_FEEDBACK, {
+          status: 'MOVEMENT_SUCCESS',
+          message: `The movement ${data} is finished`,
+          isAvailable: true,
+        });
+      })
+      .catch((error) => {
+        this.server.emit(this.GESTURE_FEEDBACK, {
+          status: 'MOVEMENT_FAILED',
+          message: `The movement ${data} failed due $`,
+          isAvailable: true,
+        });
+      });
   }
 }

@@ -1,12 +1,12 @@
 export function MovingVerification(
   target: unknown,
   methodName: string,
-  descriptor: PropertyDescriptor,
+  descriptor: PropertyDescriptor
 ) {
   let instancing = true;
   function handlerFunctionReturn(
     self: any,
-    functionReturn: Promise<any> | unknown,
+    functionReturn: Promise<any> | unknown
   ) {
     if (functionReturn instanceof Promise) {
       return functionReturn.finally(() => {

@@ -19,13 +19,34 @@ export class HandPoseService {
   }
 
   @MovingVerification
-  async doLikePose() {
+  async likePose() {
     try {
-      await this.fingers.get('thumb')?.extend();
-      await this.fingers.get('pointer')?.contract();
-      await this.fingers.get('middle')?.contract();
-      await this.fingers.get('ring')?.contract();
-      await this.fingers.get('pinky')?.contract();
+      await Promise.all([
+        this.fingers.get('middle').toPosition(100),
+        await this.fingers.get('thumb')?.extend(),
+        this.fingers.get('pointer')?.contract(),
+        this.fingers.get('middle')?.contract(),
+        this.fingers.get('ring')?.contract(),
+        this.fingers.get('pinky')?.contract(),
+      ]);
+
+      this.logger.log('like pose executed');
+    } catch (error) {
+      this.logger.error(error);
+      throw new Error(error);
+    }
+  }
+
+  @MovingVerification
+  async victory() {
+    try {
+      await Promise.all([
+        this.fingers.get('pointer')?.extend(),
+        await this.fingers.get('middle')?.extend(),
+        this.fingers.get('thumb')?.contract(),
+        this.fingers.get('ring')?.contract(),
+        this.fingers.get('pinky')?.contract(),
+      ]);
 
       this.logger.log('like pose executed');
     } catch (error) {
