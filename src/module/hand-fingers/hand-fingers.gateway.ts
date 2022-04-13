@@ -43,7 +43,7 @@ export class HandFingersGateway
   @SubscribeMessage(HandFingersGateway.GESTURE_SIGNAL)
   handleMessage(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: string
+    @MessageBody() data: string,
   ): void {
     this.server.emit(this.GESTURE_FEEDBACK, {
       status: 'MOVING',
