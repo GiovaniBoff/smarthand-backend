@@ -48,7 +48,7 @@ export class HandPoseService {
         this.fingers.get('pinky')?.contract(),
       ]);
 
-      this.logger.log('like pose executed');
+      this.logger.log('victory pose executed');
     } catch (error) {
       this.logger.error(error);
       throw new Error(error);
@@ -66,7 +66,7 @@ export class HandPoseService {
         this.fingers.get('pinky')?.contract(),
       ]);
 
-      this.logger.log('like pose executed');
+      this.logger.log('middle finger pose executed');
     } catch (error) {
       this.logger.error(error);
       throw new Error(error);
@@ -77,14 +77,34 @@ export class HandPoseService {
   async rock() {
     try {
       await Promise.all([
-        this.fingers.get('thumb')?.extend(),
-        await this.fingers.get('ring')?.extend(),
+        this.fingers.get('middle').toPosition(100),
+        await this.fingers.get('thumb')?.contract(),
+        this.fingers.get('pointer')?.extend(),
         this.fingers.get('middle')?.contract(),
-        this.fingers.get('pointer')?.contract(),
+        this.fingers.get('ring')?.contract(),
         this.fingers.get('pinky')?.extend(),
       ]);
 
-      this.logger.log('like pose executed');
+      this.logger.log('rock pose executed');
+    } catch (error) {
+      this.logger.error(error);
+      throw new Error(error);
+    }
+  }
+
+  @MovingVerification
+  async hangLoose() {
+    try {
+      await Promise.all([
+        this.fingers.get('middle').toPosition(100),
+        await this.fingers.get('thumb')?.extend(),
+        this.fingers.get('pointer')?.contract(),
+        this.fingers.get('middle')?.contract(),
+        this.fingers.get('ring')?.contract(),
+        this.fingers.get('pinky')?.extend(),
+      ]);
+
+      this.logger.log('hangLoose pose executed');
     } catch (error) {
       this.logger.error(error);
       throw new Error(error);
@@ -102,7 +122,7 @@ export class HandPoseService {
         this.fingers.get('pinky')?.contract(),
       ]);
 
-      this.logger.log('like pose executed');
+      this.logger.log('one pose executed');
     } catch (error) {
       this.logger.error(error);
       throw new Error(error);
@@ -120,7 +140,7 @@ export class HandPoseService {
         this.fingers.get('pinky')?.contract(),
       ]);
 
-      this.logger.log('like pose executed');
+      this.logger.log('three pose executed');
     } catch (error) {
       this.logger.error(error);
       throw new Error(error);
@@ -138,7 +158,25 @@ export class HandPoseService {
         this.fingers.get('pinky')?.extend(),
       ]);
 
-      this.logger.log('like pose executed');
+      this.logger.log('four pose executed');
+    } catch (error) {
+      this.logger.error(error);
+      throw new Error(error);
+    }
+  }
+
+  @MovingVerification
+  async five() {
+    try {
+      await Promise.all([
+        this.fingers.get('thumb')?.extend(),
+        await this.fingers.get('ring')?.extend(),
+        this.fingers.get('pointer')?.extend(),
+        this.fingers.get('middle')?.extend(),
+        this.fingers.get('pinky')?.extend(),
+      ]);
+
+      this.logger.log('five pose executed');
     } catch (error) {
       this.logger.error(error);
       throw new Error(error);
@@ -156,7 +194,7 @@ export class HandPoseService {
         this.fingers.get('pinky')?.contract(),
       ]);
 
-      this.logger.log('like pose executed');
+      this.logger.log('zero pose executed');
     } catch (error) {
       this.logger.error(error);
       throw new Error(error);
@@ -174,7 +212,7 @@ export class HandPoseService {
         this.fingers.get('pinky')?.extend(),
       ]);
 
-      this.logger.log('like pose executed');
+      this.logger.log('dusguri pose executed');
     } catch (error) {
       this.logger.error(error);
       throw new Error(error);
